@@ -37,7 +37,7 @@ echo $(which python)
 nvidia-smi
 
 # Code execution
-export SCRIPT=/sps/humanum/user/jroyolet/dev/polpostann/annotate_tweets.py
+export SCRIPT=/sps/humanum/user/jroyolet/dev/chileProject/annotate_tweets.py
 
 echo ""
 echo "SCRIPT:"
@@ -82,7 +82,7 @@ cmd="python ${SCRIPT} \
        --tweets_column=${TWEETSCOLUMN} \
        --system_prompt=${SYSTEMPROMT} \
        --user_prompt=${USERPROMT} \
-       --guided_choice=${CHOICES} \
+       --guided_choices=${CHOICES} \
        --outfolder=${OUTFOLDER}"
 
 echo ""

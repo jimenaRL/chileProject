@@ -115,7 +115,7 @@ if __name__ == "__main__":
     """
     python annotate_tweets.py \
        --tweets_file=text4annotate/week_45_twitter_candidates_mentions_4annotation.csv \
-       --tweets_column=cleaned_text \
+       --tweets_column=text \
        --system_prompt='You are an expert in Chilean politics' \
        --user_prompt='Please classify the following social media message (posted in the weeks leading up to the 2025 Chilean presidential election) according to whether it explicitly expresses the intention  of the author to vote for or calls for a vote for any of the candidates in that election: Jeannette Jara, José Antonio Kast, Johannes Kaiser, Evelyn Matthei, Franco Parisi, Eduardo Artés, Harold Mayne-Nichols, Marco Enríquez-Ominami (also known as MEO), or whether it expresses neither of these intentions. Your answer should be based solely on the information contained in the message. Do not assume that a message containing only positive opinions about a particular candidate explicitly expresses the intention to vote for that candidate. Do not assume that a message corresponding to the opinions or political positions of a particular candidate necessarily expresses the intention to vote for that candidate. Do not confuse retweets, indirect speech or a quote to another person with the opinion of the author of the message. Be concise and respond only with the last name or the word "None". Here is the message: ${tweet}' \
        --guided_choices='Jara,Kast,Kaiser,Matthei,Parisi,Artés,Mayne-Nichols,Enríquez-Ominami,None' \
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
      python annotate_tweets.py \
         --tweets_file=text4annotate/week_45_twitter_candidates_mentions_4annotation.csv \
-        --tweets_column=cleaned_text \
+        --tweets_column=text \
         --system_prompt=prompts/system_prompt_spanish.txt \
         --user_prompt=prompts/user_prompt_voteintention_multiple_all_spanish.txt \
         --guided_choices=multiple_choices.txt \
