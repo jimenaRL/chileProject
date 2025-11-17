@@ -1,3 +1,4 @@
-text4annotate
-translations_cleaned_text
-translations_text
+results/
+text4annotate/
+translations_cleaned_text/
+translations_text/

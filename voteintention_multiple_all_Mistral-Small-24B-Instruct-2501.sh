@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PARTITION=$1
 NBGPUS=$2
 NBWEEK=$3
@@ -7,6 +9,8 @@ if [ $SERVER = "jeanzay" ]; then
 elif [ $SERVER = "in2p3" ]; then
     export BASEPATH=/sps/humanum/user/jroyolet/dev/chileProject
 fi
+
+export SCRIPT=${BASEPATH}/slurm/${SERVER}/annotate_tweets_h100.slurm
 
 export MODELPARAMS="'{\"model\": \"mistralai/Mistral-Small-24B-Instruct-2501\", \"tokenizer_mode\": \"mistral\", \"config_format\": \"mistral\", \"load_format\": \"mistral\", \"guided_decoding_backend\": \"xgrammar\", \"seed\": 1, \"tensor_parallel_size\": ${NBGPUS}}'"
 export SAMPLINGPARAMS="'{\"temperature\": 0.15, \"seed\": 1, \"max_tokens\": 256}'"
@@ -19,8 +23,11 @@ export USERPROMT=${BASEPATH}/prompts/user_prompt_voteintention_multiple_all_span
 
 export OUTFOLDER=${BASEPATH}/results/${NAME}/week_${NBWEEK}_twitter_candidates_mentions_4annotation
 
-echo ${PARTITION}
-echo ${NBGPUS}
+echo "SERVER: ${SERVER}"
+echo "SCRIPT: ${SCRIPT}"
+echo "PARTITION: ${PARTITION}"
+echo "NBGPUS: ${NBGPUS}"
+echo "NBWEEK: ${NBWEEK}"
 
 sbatch \
     --job-name=${NAME} \
@@ -28,4 +35,4 @@ sbatch \
     --gres=gpu:${PARTITION}:${NBGPUS} \
     --output=${OUTFOLDER}/%j.log  \
     --error=${OUTFOLDER}/%j.out  \
-    ${BASEPATH}/annotate_tweets_${PARTITION}_${SERVER}.slurm
+    ${SCRIPT}

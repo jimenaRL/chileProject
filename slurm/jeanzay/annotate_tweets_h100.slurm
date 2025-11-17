@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH -A nmf@a100                  # set account
+#SBATCH -A nmf@h100                  # set account
 
-#SBATCH -C a100                      # set gpu_p5 partition (8 80GB A100 GPU per node)
+#SBATCH -C h100                      # set gpu_p6 partition (80GB H100 GPU)
 
 # We use a single node with several gpus and let vllm manage gpus paralellisation
 # with the 'tensor_parallel_size' model parameter.
@@ -11,20 +11,28 @@
 # We do this to used the same script with different gpus configs for each llm model.
 
 #SBATCH --nodes=1                    # number of nodes
-#SBATCH --export=ALL
 
-#SBATCH --cpus-per-task=12           # number of cores per task for gpu_p6 (1/4 of 4-GPUs H100 node)
+#SBATCH --cpus-per-task=24           # number of cores per task for gpu_p6 (1/4 of 4-GPUs H100 node)
 
 #SBATCH --hint=nomultithread         # hyperthreading deactivated
 
 #SBATCH --time=20:00:00              # maximum execution time requested (HH:MM:SS)
-#SBATCH --qos=qos_gpu_a100-t3        # qos of 20h limit and 128 GPU par job
+#SBATCH --qos=qos_gpu_h100-t3
+
+# Summary table: H100 GPU QoS limits
+# QoS              :  time | gpus per job | per project | per QoS
+# qos_gpu_h100-t3  :   20h |      512 GPU |     512 GPU |
+# qos_gpu_h100-t4  :  100h |       16 GPU |      64 GPU | 192 GPU
+# qos_gpu_h100-dev :    2h |       32 GPU |      32 GPU | 384 GPU
+
+#SBATCH --mail-user=jimena.royoletelier@sciencespo.fr
+#SBATCH --mail-type=ALL
 
 # Cleans out modules loaded in interactive and inherited by default
 module purge
 
 # Gives access to the modules compatible with the gpu_p6 partition
-module load arch/a100
+module load arch/h100
 
 # Show shell used
 echo "SHELL:"
@@ -46,7 +54,7 @@ nvidia-smi
 export HF_HUB_OFFLINE=1
 
 # Code execution
-export SCRIPT=/lustre/fswork/projects/rech/nmf/umu89ib/dev/chileProject/annotate_tweets.py
+export SCRIPT=/lustre/fswork/projects/rech/nmf/umu89ib/dev/polpostann/annotate_tweets.py
 
 echo ""
 echo "SCRIPT:"
