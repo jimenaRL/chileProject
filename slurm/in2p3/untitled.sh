@@ -1,8 +1,6 @@
 #!/bin/bash
 
-#SBATCH -A nmf@a100                  # set account
-
-#SBATCH -C a100                      # set gpu_p5 partition (8 80GB A100 GPU per node)
+#SBATCH --partition=gpu               # set gpu partition
 
 # We use a single node with several gpus and let vllm manage gpus paralellisation
 # with the 'tensor_parallel_size' model parameter.
@@ -10,29 +8,25 @@
 # which are given as input variable when launching this slurm script.
 # We do this to used the same script with different gpus configs for each llm model.
 
-#SBATCH --nodes=1                    # number of nodes
-#SBATCH --export=ALL
+#SBATCH --ntasks=1                    # Exécuter une seule tâche
+#SBATCH --mem=128G                    # Mémoire en MB par défaut
+#SBATCH --time=6-23:59                # Max temps execution en format « jours-heures:minutes »
 
-#SBATCH --cpus-per-task=12           # number of cores per task for gpu_p6 (1/4 of 4-GPUs H100 node)
-
-#SBATCH --hint=nomultithread         # hyperthreading deactivated
-
-#SBATCH --time=20:00:00              # maximum execution time requested (HH:MM:SS)
-#SBATCH --qos=qos_gpu_a100-t3        # qos of 20h limit and 128 GPU par job
+#SBATCH --mail-user=jimena.royoletelier@sciencespo.fr # Où envoyer l'e-mail
+#SBATCH --mail-type=ALL                # Événements déclencheurs (NONE, BEGIN, END, FAIL, ALL)
 
 # Cleans out modules loaded in interactive and inherited by default
 module purge
 
+# Load python environement
+module load Programming_Languages/python/3.11.4
+
 # Gives access to the modules compatible with the gpu_p6 partition
-module load arch/a100
+source /sps/humanum/user/jroyolet/environments/vllm-0.10.1/bin/activate
 
 # Show shell used
 echo "SHELL:"
 echo $0
-
-# Load python environement
-conda init
-conda activate vllm0.11
 
 # show python used
 echo "PYTHON:"
@@ -42,11 +36,8 @@ echo $(which python)
 # show gpus availables
 nvidia-smi
 
-# avoid html call to hugging face hub
-export HF_HUB_OFFLINE=1
-
 # Code execution
-export SCRIPT=/lustre/fswork/projects/rech/nmf/umu89ib/dev/ChileProject/annotate_tweets.py
+export SCRIPT=/sps/humanum/user/jroyolet/dev/polpostann/annotate_tweets.py
 
 echo ""
 echo "SCRIPT:"
@@ -84,7 +75,6 @@ echo ""
 echo "OUTFOLDER:"
 echo "${OUTFOLDER}"
 
-
 cmd="python ${SCRIPT} \
        --model_params=${MODELPARAMS} \
        --sampling_params=${SAMPLINGPARAMS} \
@@ -94,6 +84,8 @@ cmd="python ${SCRIPT} \
        --user_prompt=${USERPROMT} \
        --guided_choice=${CHOICES} \
        --outfolder=${OUTFOLDER}"
+
+echo ""
 echo "[RUNNING] ${cmd}"
 
 eval "$cmd"
