@@ -10,7 +10,7 @@ elif [ $SERVER = "in2p3" ]; then
     export BASEPATH=/sps/humanum/user/jroyolet/dev/chileProject
 fi
 
-export SCRIPT=${BASEPATH}/slurm/${SERVER}/annotate_tweets_h100.slurm
+export SCRIPT=${BASEPATH}/slurm/${SERVER}/annotate_tweets_${PARTITION}.slurm
 
 export MODELPARAMS="'{\"model\": \"mistralai/Mistral-Small-24B-Instruct-2501\", \"tokenizer_mode\": \"mistral\", \"config_format\": \"mistral\", \"load_format\": \"mistral\", \"guided_decoding_backend\": \"xgrammar\", \"seed\": 1, \"tensor_parallel_size\": ${NBGPUS}}'"
 export SAMPLINGPARAMS="'{\"temperature\": 0.15, \"seed\": 1, \"max_tokens\": 256}'"
@@ -20,6 +20,7 @@ export TWEETSFILE=${BASEPATH}/text4annotate/week_${NBWEEK}_twitter_candidates_me
 export TWEETSCOLUMN=cleaned_text
 export SYSTEMPROMT=${BASEPATH}/prompts/system_prompt_spanish.txt
 export USERPROMT=${BASEPATH}/prompts/user_prompt_voteintention_multiple_all_spanish.txt
+export CHOICES=${BASEPATH}/multiple_choices.txt
 
 export OUTFOLDER=${BASEPATH}/results/${NAME}/week_${NBWEEK}_twitter_candidates_mentions_4annotation
 

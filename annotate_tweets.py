@@ -113,8 +113,15 @@ def compute_llm_asnwers(data, model, sampling_params, system_prompt, user_prompt
 if __name__ == "__main__":
 
     """
-    Example of script calling using 2 gpu cards ('tensor_parallel_size' vllm model variable).
-    Deepseek recommends to avoid adding a system prompt; all instructions should be contained within the user prompt.
+    python annotate_tweets.py \
+       --tweets_file=text4annotate/week_45_twitter_candidates_mentions_4annotation.csv \
+       --tweets_column=cleaned_text \
+       --system_prompt='You are an expert in Chilean politics' \
+       --user_prompt='Please classify the following social media message (posted in the weeks leading up to the 2025 Chilean presidential election) according to whether it explicitly expresses the intention  of the author to vote for or calls for a vote for any of the candidates in that election: Jeannette Jara, José Antonio Kast, Johannes Kaiser, Evelyn Matthei, Franco Parisi, Eduardo Artés, Harold Mayne-Nichols, Marco Enríquez-Ominami (also known as MEO), or whether it expresses neither of these intentions. Your answer should be based solely on the information contained in the message. Do not assume that a message containing only positive opinions about a particular candidate explicitly expresses the intention to vote for that candidate. Do not assume that a message corresponding to the opinions or political positions of a particular candidate necessarily expresses the intention to vote for that candidate. Do not confuse retweets, indirect speech or a quote to another person with the opinion of the author of the message. Be concise and respond only with the last name or the word "None". Here is the message: ${tweet}' \
+       --guided_choice='Jara,Kast,Kaiser,Matthei,Parisi,Artés,Mayne-Nichols,Enríquez-Ominami,None' \
+       --logfile=week_45.log \
+       --outfolder=results/week_45_twitter_candidates_mentions_4annotation
+
 
      python annotate_tweets.py \
         --tweets_file=text4annotate/week_45_twitter_candidates_mentions_4annotation.csv \
@@ -166,7 +173,7 @@ if __name__ == "__main__":
     logger.info("---------------------------------------------------------")
     logger.info(f"PARAMETERS:\n{dumped_parameters[2:-2]}")
 
-    # 1/ Load prompts
+    # 1/ Load prompts and choices
     if os.path.exists(system_prompt):
         logger.info(f"System prompt loaded from file at {system_prompt}")
         with open(system_prompt, 'r') as f:
@@ -178,6 +185,12 @@ if __name__ == "__main__":
         with open(user_prompt, 'r') as f:
             user_prompt = f.read()
     logger.info(f"User prompt:\n\t{user_prompt}")
+
+    if os.path.exists(guided_choice):
+        logger.info(f"Choices loaded from file at {guided_choice}")
+        with open(guided_choice, 'r') as f:
+            guided_choice = [l[0] for l in csv.reader(f)]
+    logger.info(f"Choices:\n\t{guided_choice}")
 
     # 2/ Load data (tweets) to be used in prompts
     if not os.path.exists(tweets_file):
