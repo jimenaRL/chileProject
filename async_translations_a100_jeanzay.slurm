@@ -19,6 +19,7 @@
 #SBATCH --time=20:00:00              # maximum execution time requested (HH:MM:SS)
 #SBATCH --qos=qos_gpu_a100-t3        # qos of 20h limit and 128 GPU par job
 
+
 # Cleans out modules loaded in interactive and inherited by default
 module purge
 
@@ -38,10 +39,22 @@ echo "PYTHON:"
 echo $(python --version)
 echo $(which python)
 
+export INPUTFILE="/lustre/fswork/projects/rech/nmf/umu89ib/dev/chileProject/text4annotate/week_${NBWEEK}_twitter_candidates_mentions_4annotation.csv"
+export OUTPUTFOLDER="/lustre/fswork/projects/rech/nmf/umu89ib/dev/chileProject/translations_cleaned_text/week_${NBWEEK}_twitter_candidates_mentions_4annotation"
+
+echo "NBWEEK:"
+echo ${NBWEEK}
+
+echo "INPUTFILE:"
+echo ${INPUTFILE}
+
+echo "OUTPUTFOLDER:"
+echo ${OUTPUTFOLDER}
+
 # show gpus availables
 nvidia-smi
 
-cmd="python /lustre/fswork/projects/rech/nmf/umu89ib/dev/ChileProject/async_translations.py --nbgpus=1"
+cmd="python /lustre/fswork/projects/rech/nmf/umu89ib/dev/ChileProject/async_translations.py --nbgpus=1 --input_file=${INPUTFILE} --results_folder=${OUTPUTFOLDER}"
 
 echo "[RUNNING] ${cmd}"
 eval "$cmd"

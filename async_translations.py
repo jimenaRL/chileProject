@@ -15,7 +15,6 @@ if "SERVER" in os.environ:
     if os.environ["SERVER"] == "in2p3":
         BASEPATH =  "/sps/humanum/user/jroyolet/dev/ChileProject"
 
-DEFAULTRESFOLDER = os.path.join(BASEPATH, 'translations_cleaned_text/mistralai_Mistral-7B-Instruct-v0.2')
 DEFAULTMODEL = "mistralai/Mistral-7B-Instruct-v0.2"
 DEFAULTINSTRUCTIONS = "Please translate the following text from spanish to english. Do not provide any explanation or note. Do not produce anything other than a literal translation."
 DEFAULTCOLUMNS = "id,cleaned_text"
@@ -25,7 +24,7 @@ DEFAULTBATCHSIZE = 1000
 ap = ArgumentParser()
 ap.add_argument('--model', type=str, default=DEFAULTMODEL)
 ap.add_argument('--instructions', type=str, default=DEFAULTINSTRUCTIONS)
-ap.add_argument('--results_folder', type=str, default=DEFAULTRESFOLDER)
+ap.add_argument('--results_folder', type=str, required=True)
 ap.add_argument('--input_file', type=str, required=True)
 ap.add_argument('--content_column', type=str, default=DEFAULTCONTENTCOLUMN)
 ap.add_argument('--columns_to_keep', type=str, default=DEFAULTCOLUMNS)
@@ -49,6 +48,8 @@ dumped_parameters = json.dumps(parameters, sort_keys=True, indent=4)
 print("---------------------------------------------------------")
 print(f"PARAMETERS:\n{dumped_parameters[2:-2]}")
 print("---------------------------------------------------------")
+
+os.makedirs(results_folder, exist_ok=True)
 
 if not content_column in columns_to_keep:
     columns_to_keep.append(content_column)
@@ -85,7 +86,7 @@ async def doCompletetion(input_):
         instructions=instructions,
         input=input_[content_column])
     # format result
-    input_.update({'res': res.output_text.strip()})
+    input_.update({'english': res.output_text.strip()})
     # and return
     return input_
 
