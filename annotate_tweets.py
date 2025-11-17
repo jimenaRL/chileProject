@@ -116,16 +116,14 @@ if __name__ == "__main__":
     Example of script calling using 2 gpu cards ('tensor_parallel_size' vllm model variable).
     Deepseek recommends to avoid adding a system prompt; all instructions should be contained within the user prompt.
 
-     python tweets.py \
-        --model_params='{"model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B", "guided_decoding_backend": "xgrammar", "seed": 19, "dtype": "half", "gpu_memory_utilization": 0.9, "tensor_parallel_size": 2}' \
-        --sampling_params='{"temperature": 0.6, "top_p": 0.95}' \
-        --tweets_file=200_sampled_xan_seed_123_fr_en.csv \
-        --tweets_column=english \
-        --system_prompt='' \
-        --user_prompt='You are an expert in French politics. Please classify the following social media message (that were posted in the weeks leading up to the 2022 presidential election in France) according to whether it express support or positive attitudes towards Le Pen in this election. You must use only the information contained in the message. Be concise and answer only YES or NO. Here is the message: ${tweet}' \
-        --guided_choice=YES,NO \
-        --logfile=2Xv100DeepSeek-R1-Distill-Qwen-32B.log \
-        --outfolder=2Xv100DeepSeek-R1-Distill-Qwen-32B
+     python annotate_tweets.py \
+        --tweets_file=text4annotate/week_45_twitter_candidates_mentions_4annotation.csv \
+        --tweets_column=cleaned_text \
+        --system_prompt='You are an expert in Chilean politics' \
+        --user_prompt='Please classify the following social media message (posted in the weeks leading up to the 2025 Chilean presidential election) according to whether it explicitly expresses the intention  of the author to vote for or calls for a vote for any of the candidates in that election: Jeannette Jara, José Antonio Kast, Johannes Kaiser, Evelyn Matthei, Franco Parisi, Eduardo Artés, Harold Mayne-Nichols, Marco Enríquez-Ominami (also known as MEO), or whether it expresses neither of these intentions. Your answer should be based solely on the information contained in the message. Do not assume that a message containing only positive opinions about a particular candidate explicitly expresses the intention to vote for that candidate. Do not assume that a message corresponding to the opinions or political positions of a particular candidate necessarily expresses the intention to vote for that candidate. Do not confuse retweets, indirect speech or a quote to another person with the opinion of the author of the message. Be concise and respond only with the last name or the word "None". Here is the message: ${tweet}' \
+        --guided_choice='Jara,Kast,Kaiser,Matthei,Parisi,Artés,Mayne-Nichols,Enríquez-Ominami,None' \
+        --logfile=week_45.log \
+        --outfolder=results/week_45_twitter_candidates_mentions_4annotation
     """
 
     ap = ArgumentParser()
