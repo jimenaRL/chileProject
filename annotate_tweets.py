@@ -118,7 +118,7 @@ if __name__ == "__main__":
        --tweets_column=cleaned_text \
        --system_prompt='You are an expert in Chilean politics' \
        --user_prompt='Please classify the following social media message (posted in the weeks leading up to the 2025 Chilean presidential election) according to whether it explicitly expresses the intention  of the author to vote for or calls for a vote for any of the candidates in that election: Jeannette Jara, José Antonio Kast, Johannes Kaiser, Evelyn Matthei, Franco Parisi, Eduardo Artés, Harold Mayne-Nichols, Marco Enríquez-Ominami (also known as MEO), or whether it expresses neither of these intentions. Your answer should be based solely on the information contained in the message. Do not assume that a message containing only positive opinions about a particular candidate explicitly expresses the intention to vote for that candidate. Do not assume that a message corresponding to the opinions or political positions of a particular candidate necessarily expresses the intention to vote for that candidate. Do not confuse retweets, indirect speech or a quote to another person with the opinion of the author of the message. Be concise and respond only with the last name or the word "None". Here is the message: ${tweet}' \
-       --guided_choice='Jara,Kast,Kaiser,Matthei,Parisi,Artés,Mayne-Nichols,Enríquez-Ominami,None' \
+       --guided_choices='Jara,Kast,Kaiser,Matthei,Parisi,Artés,Mayne-Nichols,Enríquez-Ominami,None' \
        --logfile=week_45.log \
        --outfolder=results/week_45_twitter_candidates_mentions_4annotation
 
@@ -126,9 +126,9 @@ if __name__ == "__main__":
      python annotate_tweets.py \
         --tweets_file=text4annotate/week_45_twitter_candidates_mentions_4annotation.csv \
         --tweets_column=cleaned_text \
-        --system_prompt='You are an expert in Chilean politics' \
-        --user_prompt='Please classify the following social media message (posted in the weeks leading up to the 2025 Chilean presidential election) according to whether it explicitly expresses the intention  of the author to vote for or calls for a vote for any of the candidates in that election: Jeannette Jara, José Antonio Kast, Johannes Kaiser, Evelyn Matthei, Franco Parisi, Eduardo Artés, Harold Mayne-Nichols, Marco Enríquez-Ominami (also known as MEO), or whether it expresses neither of these intentions. Your answer should be based solely on the information contained in the message. Do not assume that a message containing only positive opinions about a particular candidate explicitly expresses the intention to vote for that candidate. Do not assume that a message corresponding to the opinions or political positions of a particular candidate necessarily expresses the intention to vote for that candidate. Do not confuse retweets, indirect speech or a quote to another person with the opinion of the author of the message. Be concise and respond only with the last name or the word "None". Here is the message: ${tweet}' \
-        --guided_choice='Jara,Kast,Kaiser,Matthei,Parisi,Artés,Mayne-Nichols,Enríquez-Ominami,None' \
+        --system_prompt=prompts/system_prompt_spanish.txt \
+        --user_prompt=prompts/user_prompt_voteintention_multiple_all_spanish.txt \
+        --guided_choices=multiple_choices.txt \
         --logfile=week_45.log \
         --outfolder=results/week_45_twitter_candidates_mentions_4annotation
     """
@@ -140,7 +140,7 @@ if __name__ == "__main__":
 
     ap.add_argument('--system_prompt', required=True, type=str)
     ap.add_argument('--user_prompt', required=True, type=str)
-    ap.add_argument('--guided_choice', required=False, type=str, default='')
+    ap.add_argument('--guided_choices', required=False, type=str, default='')
 
     ap.add_argument('--tweets_file', required=True, type=str)
     ap.add_argument('--tweets_column', required=True, type=str)
@@ -156,7 +156,7 @@ if __name__ == "__main__":
 
     system_prompt = args.system_prompt
     user_prompt = args.user_prompt
-    guided_choice = args.guided_choice.split(',') if args.guided_choice else None
+    guided_choices = args.guided_choices
     tweets_file = args.tweets_file
     tweets_column = args.tweets_column
 
@@ -186,11 +186,13 @@ if __name__ == "__main__":
             user_prompt = f.read()
     logger.info(f"User prompt:\n\t{user_prompt}")
 
-    if os.path.exists(guided_choice):
-        logger.info(f"Choices loaded from file at {guided_choice}")
-        with open(guided_choice, 'r') as f:
-            guided_choice = [l[0] for l in csv.reader(f)]
-    logger.info(f"Choices:\n\t{guided_choice}")
+    if os.path.exists(guided_choices):
+        logger.info(f"Choices loaded from file at {guided_choices}")
+        with open(guided_choices, 'r') as f:
+            guided_choices = [l[0] for l in csv.reader(f)]
+    else:
+        guided_choices = guided_choices.split(',')
+    logger.info(f"Choices:\n\t{guided_choices}")
 
     # 2/ Load data (tweets) to be used in prompts
     if not os.path.exists(tweets_file):
@@ -201,8 +203,8 @@ if __name__ == "__main__":
     print(f"Load {len(tweets)} tweets from column {tweets_column} on {tweets_file}.")
 
     # 3/ Set sampling params
-    if guided_choice:
-        guided_decoding_params = GuidedDecodingParams(choice=guided_choice)
+    if guided_choices:
+        guided_decoding_params = GuidedDecodingParams(choice=guided_choices)
         sp = SamplingParams(
             **sampling_params,
             guided_decoding=guided_decoding_params)
