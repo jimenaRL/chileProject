@@ -24,7 +24,6 @@ echo "PARTITION: ${PARTITION}"
 echo "NBWEEK: ${NBWEEK}"
 echo "INPUTFILE: ${INPUTFILE}"
 echo "OUTPUTFOLDER: ${OUTPUTFOLDER}"
-echo "GRES: ${GRES}"
 echo "OUTPUT: ${OUTPUT}"
 echo "ERROR: ${ERROR}"
 
