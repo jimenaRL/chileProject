@@ -17,8 +17,8 @@ if "SERVER" in os.environ:
 
 DEFAULTMODEL = "mistralai/Mistral-7B-Instruct-v0.2"
 DEFAULTINSTRUCTIONS = "Please translate the following text from spanish to english. Do not provide any explanation or note. Do not produce anything other than a literal translation."
-DEFAULTCOLUMNS = "id,cleaned_text"
-DEFAULTCONTENTCOLUMN = "cleaned_text"
+DEFAULTCOLUMNS = "id,text"
+DEFAULTCONTENTCOLUMN = "text"
 DEFAULTBATCHSIZE = 1000
 
 ap = ArgumentParser()
