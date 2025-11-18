@@ -18,7 +18,6 @@
 
 #SBATCH --time=20:00:00              # maximum execution time requested (HH:MM:SS)
 #SBATCH --qos=qos_gpu_a100-t3        # qos of 20h limit and 128 GPU par job
-#SBATCH --nodes=ALL
 
 # Cleans out modules loaded in interactive and inherited by default
 module purge
