@@ -1,28 +1,17 @@
-#!/bin/bash
+#!/bin/sh
 
-#SBATCH --partition=gpu               # set gpu partition
-
-# We use a single node with several gpus and let vllm manage gpus paralellisation
-# with the 'tensor_parallel_size' model parameter.
-# The number of gpus used is defined by the paramametes 'gres' and 'ntasks-per-node'
-# which are given as input variable when launching this slurm script.
-# We do this to used the same script with different gpus configs for each llm model.
+# SLURM options:
 
 #SBATCH --ntasks=1                    # Exécuter une seule tâche
 #SBATCH --mem=128G                    # Mémoire en MB par défaut
-#SBATCH --time=6-23:59                # Max temps execution en format « jours-heures:minutes »
+#SBATCH --time=6-23:59             #  Max temps execution en format « jours-heures:minutes »
 
 #SBATCH --mail-user=jimena.royoletelier@sciencespo.fr # Où envoyer l'e-mail
-#SBATCH --mail-type=ALL                # Événements déclencheurs (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-type=ALL          # Événements déclencheurs (NONE, BEGIN, END, FAIL, ALL)
 
-# Cleans out modules loaded in interactive and inherited by default
-module purge
-
-# Load python environement
 module load Programming_Languages/python/3.11.4
-
-# Gives access to the modules compatible with the gpu_p6 partition
 source /sps/humanum/user/jroyolet/environments/vllm-0.10.1/bin/activate
+
 
 # Show shell used
 echo "SHELL:"
@@ -35,6 +24,8 @@ echo $(which python)
 
 # show gpus availables
 nvidia-smi
+
+export SCRIPT=/sps/humanum/user/jroyolet/dev/chileProject/async_translations.py
 
 echo ""
 echo "SCRIPT:"
