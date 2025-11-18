@@ -2,7 +2,11 @@
 
 # SLURM options:
 
+#SBATCH --gres=gpu:h100:1
+#SBATCH --ntasks-per-node=1
+#SBATCH --nodes=1
 #SBATCH --ntasks=1                    # Exécuter une seule tâche
+
 #SBATCH --mem=128G                    # Mémoire en MB par défaut
 #SBATCH --time=6-23:59             #  Max temps execution en format « jours-heures:minutes »
 
@@ -36,15 +40,11 @@ echo "INPUTFILE:"
 echo "${INPUTFILE}"
 
 echo ""
-echo "NBGPUS:"
-echo "${NBGPUS}"
-
-echo ""
 echo "OUTPUTFOLDER:"
 echo "${OUTPUTFOLDER}"
 
 cmd="python ${SCRIPT} \
-       --nbgpus=${NBGPUS} \
+       --nbgpus=1 \
        --input_file=${INPUTFILE} \
        --results_folder=${OUTPUTFOLDER}"
 
