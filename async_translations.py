@@ -89,8 +89,7 @@ async def doCompletetion(input_):
         model=model,
         instructions=instructions,
         input=input_[content_column],
-        max_tokens=max_tokens,
-        seed=seed)
+        extra_body={"max_output_tokens": max_tokens})
     # format result
     input_.update({'english': res.output_text.strip()})
     # and return
