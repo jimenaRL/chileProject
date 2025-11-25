@@ -2,7 +2,8 @@
 
 # SLURM options:
 
-#SBATCH --gres=gpu:h100:1
+#SBATCH --partition=gpu_h100
+#SBATCH --gpus=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --nodes=1
 #SBATCH --ntasks=1                    # Exécuter une seule tâche
