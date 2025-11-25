@@ -12,7 +12,7 @@ fi
 export SCRIPT=${BASEPATH}/slurm/${SERVER}/async_translations_${PARTITION}.slurm
 export INPUTFILE=${BASEPATH}/text4annotate/week_${NBWEEK}_twitter_candidates_mentions_4annotation.csv
 export OUTPUTFOLDER=${BASEPATH}/translations_text/week_${NBWEEK}_twitter_candidates_mentions_4annotation
-export NAME=${PARTITION}tw${NBWEEK}
+export NAME=t${NBWEEK}${PARTITION}
 
 export OUTPUT=${OUTPUTFOLDER}/%j.log
 export ERROR=${OUTPUTFOLDER}/%j.out
