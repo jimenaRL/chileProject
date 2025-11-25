@@ -36,7 +36,7 @@ csvfiles = [os.path.join(
 with tempfile.NamedTemporaryFile() as tmp:
     with open(tmp.name, "w") as f:
         f.write('\n'.join(csvfiles))
-    os.system(f'xan cat rows --paths {tmp.name} | xan map "slice(english, 0, 350) as english_cropped" > {finalcsv}')
+    os.system(f'xan cat rows --paths {tmp.name} | xan map "slice(english, 0, 350) as english_cropped" | xan drop english | xan rename english -s english_cropped > {finalcsv}')
 
 os.system(f"xan head {finalcsv} | xan v")
 
