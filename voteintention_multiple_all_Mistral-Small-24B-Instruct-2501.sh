@@ -16,13 +16,13 @@ export MODELPARAMS="'{\"model\": \"mistralai/Mistral-Small-24B-Instruct-2501\", 
 export SAMPLINGPARAMS="'{\"temperature\": 0.15, \"seed\": 1, \"max_tokens\": 256}'"
 export NAME=Mistral-Small-24B-Instruct-2501-seed1
 
-export TWEETSFILE=${BASEPATH}/text4annotate/week_${NBWEEK}_twitter_candidates_mentions_4annotation.csv
-export TWEETSCOLUMN=text
-export SYSTEMPROMT=${BASEPATH}/prompts/system_prompt_spanish.txt
-export USERPROMT=${BASEPATH}/prompts/user_prompt_voteintention_multiple_all_spanish.txt
+export TWEETSFILE=${BASEPATH}/translations_text/week_${NBWEEK}_translations_text_column.csv
+export TWEETSCOLUMN=english
+export SYSTEMPROMT=${BASEPATH}/prompts/system_prompt_english.txt
+export USERPROMT=${BASEPATH}/prompts/user_prompt_voteintention_multiple_all_english.txt
 export CHOICES=${BASEPATH}/guided_choices.txt
 
-export OUTFOLDER=${BASEPATH}/results/${NAME}/week_${NBWEEK}_twitter_candidates_mentions_4annotation
+export OUTFOLDER=${BASEPATH}/annotations/${NAME}/week_${NBWEEK}_twitter_candidates_mentions_4annotation/english
 
 echo "SERVER: ${SERVER}"
 echo "SCRIPT: ${SCRIPT}"
@@ -31,9 +31,9 @@ echo "NBGPUS: ${NBGPUS}"
 echo "NBWEEK: ${NBWEEK}"
 
 sbatch \
-    --job-name=${NAME} \
+    --job-name=aw${NBWEEK}${PARTITION} \
     --ntasks-per-node=${NBGPUS} \
-    --gres=gpu:${PARTITION}:${NBGPUS} \
+    --gpus=${NBGPUS} \
     --output=${OUTFOLDER}/%j.log  \
     --error=${OUTFOLDER}/%j.out  \
     ${SCRIPT}
