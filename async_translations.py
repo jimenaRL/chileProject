@@ -23,6 +23,7 @@ DEFAULTBATCHSIZE = 1000
 
 ap = ArgumentParser()
 ap.add_argument('--model', type=str, default=DEFAULTMODEL)
+ap.add_argument('--max_token', type=int, default=100)
 ap.add_argument('--instructions', type=str, default=DEFAULTINSTRUCTIONS)
 ap.add_argument('--results_folder', type=str, required=True)
 ap.add_argument('--input_file', type=str, required=True)
@@ -31,6 +32,7 @@ ap.add_argument('--columns_to_keep', type=str, default=DEFAULTCOLUMNS)
 ap.add_argument('--batch_size', type=int, default=DEFAULTBATCHSIZE)
 ap.add_argument('--reverse_batch_order',  action='store_true')
 ap.add_argument('--nbgpus', type=int, default=1)
+ap.add_argument('--seed', type=int, default=123)
 
 args = ap.parse_args()
 model = args.model
@@ -42,6 +44,8 @@ columns_to_keep = args.columns_to_keep.split(",")
 reverse_batch_order = args.reverse_batch_order
 results_folder = args.results_folder
 batch_size = args.batch_size
+max_tokens = args.max_token
+seed = args.seed
 
 parameters = vars(args)
 dumped_parameters = json.dumps(parameters, sort_keys=True, indent=4)
@@ -84,7 +88,9 @@ async def doCompletetion(input_):
     res = client.responses.create(
         model=model,
         instructions=instructions,
-        input=input_[content_column])
+        input=input_[content_column],
+        max_tokens=max_tokens,
+        seed=seed)
     # format result
     input_.update({'english': res.output_text.strip()})
     # and return
