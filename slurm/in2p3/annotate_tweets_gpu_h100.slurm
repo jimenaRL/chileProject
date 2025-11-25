@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --partition=gpu               # set gpu partition
+#SBATCH --partition=gpu_h100               # set gpu partition
 
 # We use a single node with several gpus and let vllm manage gpus paralellisation
 # with the 'tensor_parallel_size' model parameter.
