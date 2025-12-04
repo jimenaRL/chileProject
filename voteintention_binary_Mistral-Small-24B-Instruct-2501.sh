@@ -32,7 +32,7 @@ else
 fi
 export SYSTEMPROMT=${BASEPATH}/prompts/system_prompt_${LANGUAGE}.txt
 export USERPROMT=${BASEPATH}/prompts/user_prompt_voteintention_binary_${CANDIDATE}_${LANGUAGE}.txt
-export CHOICES=${BASEPATH}/choices/binary/${CANDIDATE}.txt
+export CHOICES=${BASEPATH}/choices/binary.txt
 
 export OUTFOLDER=${BASEPATH}/annotations/${NAME}/guided/voteintention/binary/${CANDIDATE}/week_${NBWEEK}_twitter_candidates_mentions_4annotation/${LANGUAGE}
 
@@ -41,7 +41,13 @@ echo "SCRIPT: ${SCRIPT}"
 echo "PARTITION: ${PARTITION}"
 echo "NBGPUS: ${NBGPUS}"
 echo "NBWEEK: ${NBWEEK}"
+echo "CANDIDATE: ${CANDIDATE}"
+echo "OUTFOLDER: ${OUTFOLDER}"
 
 sbatch \
-    --job-name=aw${NBWEEK}${LANGUAGE}${PARTITION} \
-    --ntasks-per-node=${NBGPUS}
+    --job-name=a${NBWEEK}${LANGUAGE:0:2}${CANDIDATE}${PARTITION} \
+    --ntasks-per-node=${NBGPUS} \
+    --gpus=${NBGPUS} \
+    --output=${OUTFOLDER}/%j.log  \
+    --error=${OUTFOLDER}/%j.out  \
+    ${SCRIPT}

@@ -40,9 +40,10 @@ echo "SCRIPT: ${SCRIPT}"
 echo "PARTITION: ${PARTITION}"
 echo "NBGPUS: ${NBGPUS}"
 echo "NBWEEK: ${NBWEEK}"
+echo "OUTFOLDER: ${OUTFOLDER}"
 
 sbatch \
-    --job-name=aw${NBWEEK}${LANGUAGE}${PARTITION} \
+    --job-name=aw${NBWEEK}${LANGUAGE:0:2}${PARTITION} \
     --ntasks-per-node=${NBGPUS} \
     --gpus=${NBGPUS} \
     --output=${OUTFOLDER}/%j.log  \
