@@ -31,7 +31,7 @@ else
 fi
 export SYSTEMPROMT=${BASEPATH}/prompts/system_prompt_${LANGUAGE}.txt
 export USERPROMT=${BASEPATH}/prompts/user_prompt_voteintention_multiple_all_${LANGUAGE}.txt
-export CHOICES=${BASEPATH}/guided_choices.txt
+export CHOICES=${BASEPATH}/choices/multiple.txt
 
 export OUTFOLDER=${BASEPATH}/annotations/${NAME}/guided/voteintention/multiple/week_${NBWEEK}_twitter_candidates_mentions_4annotation/${LANGUAGE}
 
