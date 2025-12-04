@@ -14,16 +14,17 @@ fi
 export SCRIPT=${BASEPATH}/slurm/${SERVER}/annotate_tweets_${PARTITION}.slurm
 
 export MODELPARAMS="'{\"model\": \"mistralai/Mistral-Small-24B-Instruct-2501\", \"tokenizer_mode\": \"mistral\", \"config_format\": \"mistral\", \"load_format\": \"mistral\", \"guided_decoding_backend\": \"xgrammar\", \"seed\": 1, \"tensor_parallel_size\": ${NBGPUS}}'"
-export SAMPLINGPARAMS="'{\"temperature\": 0.15, \"seed\": 1, \"max_tokens\": 256}'"
+export SAMPLINGPARAMS="'{\"temperature\": 0.15, \"seed\": 33, \"max_tokens\": 256}'"
 export NAME=Mistral-Small-24B-Instruct-2501-seed1
 
-export TWEETSFILE=${BASEPATH}/translations_text/week_${NBWEEK}_translations_text_column.csv
 if [[ "$LANGUAGE" = "spanish" ]]
 then
     export TWEETSCOLUMN=text
+    export TWEETSFILE=${BASEPATH}/text4annotate/week_${NBWEEK}_twitter_candidates_mentions_4annotation.csv
 elif [[ "$LANGUAGE" = "english" ]]
 then
-     export TWEETSCOLUMN=english
+    export TWEETSCOLUMN=english
+    export TWEETSFILE=${BASEPATH}/translations_text/week_${NBWEEK}_translations_text_column.csv
 else
      echo "Bad LANGUAGE variable: ${LANGUAGE}"
      exit 1
