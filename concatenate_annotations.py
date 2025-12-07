@@ -5,7 +5,7 @@ from argparse import ArgumentParser
 
 DEFAULTBASEPATH = os.path.dirname(os.path.realpath(__file__))
 DEFAULTLANG = "english"
-CANDIDATES = ["all", "kast", "jara"]
+CANDIDATES = ["all", "kast", "jara", "kaiser", "matthei", "parisi", "artes", "enriquez-ominami", "mayne-nichols"]
 TASKS = ["voteintention", "support", "criticims"]
 KINDS = ["multiple", "binary"]
 
