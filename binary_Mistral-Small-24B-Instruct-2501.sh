@@ -46,7 +46,7 @@ echo "CANDIDATE: ${CANDIDATE}"
 echo "OUTFOLDER: ${OUTFOLDER}"
 
 sbatch \
-    --job-name=b${NBWEEK}${LANGUAGE:0:2}${CANDIDATE}${PARTITION} \
+    --job-name=b${NBWEEK}${LANGUAGE:0:2}_${TASK:0:1}${CANDIDATE:0:1} \
     --ntasks-per-node=${NBGPUS} \
     --gpus=${NBGPUS} \
     --output=${OUTFOLDER}/%j.log  \
