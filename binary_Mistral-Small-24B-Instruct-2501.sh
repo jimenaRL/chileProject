@@ -4,8 +4,8 @@ PARTITION=$1
 NBGPUS=$2
 NBWEEK=$3
 LANGUAGE=$4
-CANDIDATE=$5
-TASK=$6
+TASK=$5
+CANDIDATE=$6
 
 if [ $SERVER = "jeanzay" ]; then
     export BASEPATH=/lustre/fswork/projects/rech/nmf/umu89ib/dev/chileProject
