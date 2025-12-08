@@ -25,6 +25,9 @@ candidate = args.candidate
 kind = args.kind
 week = args.week
 
+if kind == "binary" and candidate == "all":
+    raise ValueError(f"Invalid candidate 'all' for kind 'binary'.")
+
 path_pattern = os.path.join(
     basepath,
     "annotations/Mistral-Small-24B-Instruct-2501-seed33/guided",
@@ -48,7 +51,10 @@ text2annotatepath = os.path.join(
      "text4annotate",
      f"week_{week}_twitter_candidates_mentions_4annotation.csv")
 
-maxfilenb = max([int(p.split("_")[-1].split('.')[0]) for p in glob(path_pattern)])
+files = glob(path_pattern)
+if len(files) == 0:
+    raise ValueError(f"Din't find and file with pattern {path_pattern}")
+maxfilenb = max([int(f.split("_")[-1].split('.')[0]) for f in files])
 
 csvfiles = [os.path.join(
     basepath,
