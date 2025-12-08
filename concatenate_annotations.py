@@ -27,7 +27,7 @@ week = args.week
 
 path_pattern = os.path.join(
     basepath,
-    "annotations/Mistral-Small-24B-Instruct-2501-seed1/guided",
+    "annotations/Mistral-Small-24B-Instruct-2501-seed33/guided",
     task,
     kind,
     candidate,
@@ -37,7 +37,7 @@ path_pattern = os.path.join(
 
 finalcsv = os.path.join(
     basepath,
-    "annotations/Mistral-Small-24B-Instruct-2501-seed1/guided",
+    "annotations/Mistral-Small-24B-Instruct-2501-seed33/guided",
     task,
     kind,
     candidate,
@@ -52,7 +52,7 @@ maxfilenb = max([int(p.split("_")[-1].split('.')[0]) for p in glob(path_pattern)
 
 csvfiles = [os.path.join(
     basepath,
-    "annotations/Mistral-Small-24B-Instruct-2501-seed1/guided/",
+    "annotations/Mistral-Small-24B-Instruct-2501-seed33/guided/",
     task,
     kind,
     candidate,
