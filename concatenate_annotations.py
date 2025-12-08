@@ -62,6 +62,12 @@ csvfiles = [os.path.join(
     for n in range(maxfilenb+1)
     ]
 
+missing = [p for p in csvfiles if not os.path.exists(p)]
+if len(missing) > 0:
+    m = "\n".join(missing)
+    raise ValueError(f"Mising csv files:\n{m}")
+
+
 with tempfile.NamedTemporaryFile() as tmp:
     with open(tmp.name, "w") as f:
         f.write('\n'.join(csvfiles))
