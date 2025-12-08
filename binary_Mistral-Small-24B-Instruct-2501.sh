@@ -13,11 +13,13 @@ elif [ $SERVER = "in2p3" ]; then
     export BASEPATH=/sps/humanum/user/jroyolet/dev/chileProject
 fi
 
+export SEED=33
+
 export SCRIPT=${BASEPATH}/slurm/${SERVER}/annotate_tweets_${PARTITION}.slurm
 
-export MODELPARAMS="'{\"model\": \"mistralai/Mistral-Small-24B-Instruct-2501\", \"tokenizer_mode\": \"mistral\", \"config_format\": \"mistral\", \"load_format\": \"mistral\", \"guided_decoding_backend\": \"xgrammar\", \"seed\": 1, \"tensor_parallel_size\": ${NBGPUS}}'"
-export SAMPLINGPARAMS="'{\"temperature\": 0.15, \"seed\": 33, \"max_tokens\": 256}'"
-export NAME=Mistral-Small-24B-Instruct-2501-seed1
+export MODELPARAMS="'{\"model\": \"mistralai/Mistral-Small-24B-Instruct-2501\", \"tokenizer_mode\": \"mistral\", \"config_format\": \"mistral\", \"load_format\": \"mistral\", \"guided_decoding_backend\": \"xgrammar\", \"seed\": ${SEED}, \"tensor_parallel_size\": ${NBGPUS}}'"
+export SAMPLINGPARAMS="'{\"temperature\": 0.15, \"seed\": ${SEED}, \"max_tokens\": 256}'"
+export NAME=Mistral-Small-24B-Instruct-2501-seed${SEED}
 
 if [[ "$LANGUAGE" = "spanish" ]]
 then
@@ -33,7 +35,7 @@ else
 fi
 export SYSTEMPROMT=${BASEPATH}/prompts/system_prompt_${LANGUAGE}.txt
 export USERPROMT=${BASEPATH}/prompts/user_prompt_${TASK}_binary_${CANDIDATE}_${LANGUAGE}.txt
-export CHOICES=${BASEPATH}/choices/binary.txt
+export CHOICES=${BASEPATH}/choices/binary_${LANGUAGE}.txt
 
 export OUTFOLDER=${BASEPATH}/annotations/${NAME}/guided/${TASK}/binary/${CANDIDATE}/week_${NBWEEK}_twitter_candidates_mentions_4annotation/${LANGUAGE}
 
