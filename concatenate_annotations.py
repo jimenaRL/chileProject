@@ -3,37 +3,59 @@ import tempfile
 from glob import glob
 from argparse import ArgumentParser
 
-DEFAULTBASEPATH = "/sps/humanum/user/jroyolet/dev/chileProject/annotations/Mistral-Small-24B-Instruct-2501-seed1/guided/voteintention/multiple"
+DEFAULTBASEPATH = os.path.dirname(os.path.realpath(__file__))
 DEFAULTLANG = "english"
+CANDIDATES = ["all", "kast", "jara", "kaiser", "matthei", "parisi", "artes", "enriquez-ominami", "mayne-nichols"]
+TASKS = ["voteintention", "support", "criticims"]
+KINDS = ["multiple", "binary"]
 
 ap = ArgumentParser()
 ap.add_argument('--basepath', type=str, default=DEFAULTBASEPATH)
 ap.add_argument('--language', type=str, default=DEFAULTLANG)
+ap.add_argument('--task', type=str, default=TASKS[0], choices=TASKS)
+ap.add_argument('--kind', type=str, default=KINDS[0], choices=KINDS)
+ap.add_argument('--candidate', type=str, default=CANDIDATES[0], choices=CANDIDATES)
 ap.add_argument('--week', type=int, required=True)
 
 args = ap.parse_args()
 basepath = args.basepath
 language = args.language
+task = args.task
+candidate = args.candidate
+kind = args.kind
 week = args.week
 
 path_pattern = os.path.join(
     basepath,
+    "annotations/Mistral-Small-24B-Instruct-2501-seed1/guided",
+    task,
+    kind,
+    candidate,
     f"week_{week}_twitter_candidates_mentions_4annotation",
     language,
     "llm_answer_*.csv")
 
 finalcsv = os.path.join(
     basepath,
-    f"annotations_week_{week}_{language}.csv")
+    "annotations/Mistral-Small-24B-Instruct-2501-seed1/guided",
+    task,
+    kind,
+    candidate,
+    f"annotations_week_{week}_{task}_{kind}_{candidate}_{language}.csv")
 
 text2annotatepath = os.path.join(
-     "/sps/humanum/user/jroyolet/dev/chileProject/",
-     f"text4annotate/week_{week}_twitter_candidates_mentions_4annotation.csv")
+     basepath,
+     "text4annotate",
+     f"week_{week}_twitter_candidates_mentions_4annotation.csv")
 
 maxfilenb = max([int(p.split("_")[-1].split('.')[0]) for p in glob(path_pattern)])
 
 csvfiles = [os.path.join(
     basepath,
+    "annotations/Mistral-Small-24B-Instruct-2501-seed1/guided/",
+    task,
+    kind,
+    candidate,
     f"week_{week}_twitter_candidates_mentions_4annotation",
     language,
     f"llm_answer_{n}.csv")
